@@ -1,0 +1,23 @@
+metric,value
+kvasir_detection/mAP@0.5,0.4999
+kvasir_detection/micro_f1,0.6667
+kvasir_detection/n_images,30.0
+kvasir_detection/n_oom_skipped,0.0
+kvasir_seg_polyp/mean_dice,0.7019
+kvasir_seg_polyp/mean_iou,0.6425
+kvasir_seg_polyp/n_images,30.0
+kvasir_seg_polyp/n_oom_skipped,0.0
+kvasir_rejection/true_rejection_rate,0.5833
+kvasir_rejection/false_rejection_rate,0.0
+kvasir_rejection/n_neg,60.0
+kvasir_rejection/n_pos,30.0
+bccd_detection/mAP@0.5,0.1952
+bccd_detection/micro_f1,0.2985
+bccd_detection/per_class_ap/red blood cell,0.3543
+bccd_detection/per_class_ap/white blood cell,0.0361
+bccd_detection/n_images,30.0
+bccd_detection/n_oom_skipped,0.0
+bccd_counting_wbc/MAE,25.6
+bccd_counting_wbc/RMSE,26.1661
+bccd_counting_wbc/exact_acc,0.0
+bccd_counting_wbc/n_images,30.0

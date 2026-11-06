@@ -1,0 +1,50 @@
+# MedPercept-Bench dataset & evaluation configuration
+# All paths are relative to repo root unless absolute.
+
+data_root: data
+output_root: results
+
+iou_threshold: 0.5
+mask_threshold: 0.5          # threshold model soft masks to binary
+max_new_tokens: 1024        # was 4096; caps runaway generations (memory + time)
+temperature: 0.0
+
+kvasir:
+  subset: 30                 # number of images (out of 1000); null = all. Use 100-200 once the quick run works
+  seed: 42
+  tasks:
+    referring_segmentation:
+      queries: ["polyp"]
+      task: segmentation
+    detection:
+      queries: ["polyp"]
+      task: detection
+    rejection:
+      negative_queries: ["white blood cell", "giraffe"]
+      positive_queries: ["polyp"]
+      task: detection
+
+bccd:
+  subset: 30                  # number of images (out of 364); null = all
+  seed: 42
+  include_platelets: false
+  tasks:
+    open_vocab_detection:
+      queries: ["white blood cell", "red blood cell"]
+      task: detection
+    counting:
+      query: "white blood cell"
+      task: count_box
+
+model:
+  name: tencent/WeVisOne-VL-2B   # or tencent/WeVisOne-VL-4B
+  device: auto                   # auto / cuda:0 / cpu
+  dtype: bfloat16                # T4 has no native bf16 but it works; try float16 only if bf16 errors
+  max_pixels: 786432             # 768*32*32. Upstream default is 2025*32*32 (~2.1M px) = OOM on T4
+
+mock:
+  noise: 0.05
+  miss_prob: 0.2
+  fp_prob: 0.1
+  reject_prob: 0.0
+  seed: 42

@@ -1,0 +1,36 @@
+{
+  "kvasir_detection": {
+    "mAP@0.5": 0.49992837359772846,
+    "micro_f1": 0.6666666666666667,
+    "n_images": 30,
+    "n_oom_skipped": 0
+  },
+  "kvasir_seg_polyp": {
+    "mean_dice": 0.7018952823179044,
+    "mean_iou": 0.6425380635957121,
+    "n_images": 30,
+    "n_oom_skipped": 0
+  },
+  "kvasir_rejection": {
+    "true_rejection_rate": 0.5833333333333334,
+    "false_rejection_rate": 0.0,
+    "n_neg": 60,
+    "n_pos": 30
+  },
+  "bccd_detection": {
+    "mAP@0.5": 0.19523012126754757,
+    "micro_f1": 0.2984760903836048,
+    "per_class_ap": {
+      "red blood cell": 0.3543173243344241,
+      "white blood cell": 0.03614291820067103
+    },
+    "n_images": 30,
+    "n_oom_skipped": 0
+  },
+  "bccd_counting_wbc": {
+    "MAE": 25.6,
+    "RMSE": 26.166135875720485,
+    "exact_acc": 0.0,
+    "n_images": 30
+  }
+}
