@@ -2,7 +2,7 @@
 
 ### How far can a brand-new vision-language model get on medical images **without any medical training**?
 
-A zero-shot evaluation of Tencent's **WeVisOne-VL-2B** (released Oct 2026) on colonoscopy polyps (Kvasir-SEG) and blood-cell smears (BCCD).
+A zero-shot evaluation of Tencent's **WeVisOne-VL-2B** (released Oct 2026) on colonoscopy polyps (Kvasir-SEG) and blood-cell smears (BCCD) medical datasets.
 Built, run and written up as a learning project during my search for a research-based MS → PhD position.
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/naveed1011/MedPercept-Bench/blob/main/notebooks/MedPercept_Bench_Colab.ipynb)
@@ -25,7 +25,7 @@ Built, run and written up as a learning project during my search for a research-
 | BCCD (blood cells) | open-vocabulary detection | `red blood cell`, `white blood cell` | 30 |
 | BCCD | counting | `white blood cell` | 30 |
 
-The model is frozen (no training of any kind) and runs on a free Colab T4. Metrics are in `src/metrics.py` (13 unit tests).
+The model is frozen so no training of any kind and runs on a free Colab T4. Metrics are in `src/metrics.py` (13 unit tests).
 
 ## Results
 
@@ -59,7 +59,7 @@ when the localisation is clearly right.
 ![failure cases](assets/figures/kvasir_failure_cases.png)
 
 **2. Blood cells.** WBC AP of 0.04 and about 25 predicted "white blood cells" per image (the counting predictions range from 11 to 35 and none matched exactly) suggest the
-model is boxing red blood cells when asked for white ones. That is a *hypothesis*: I have not yet drawn overlays for BCCD to confirm it, but RBC AP (0.35) being much higher than WBC AP (0.04) points the same way. A natural-image model has seen plenty of "cells"-like blobs but not this fine-grained distinction.
+model is boxing red blood cells when asked for white ones. That is a *hypothesis*: I have not yet drawn overlays for BCCD to confirm it, but RBC AP (0.35) being much higher than WBC AP (0.04) points to the same way. A natural-image model has seen plenty of "cells"-like blobs but not this fine-grained distinction.
 
 **3. Rejection is selective.** It never wrongly rejected a real polyp (0% false rejection), and it rejected `giraffe` every time (30/30), but it only said "None" for `white blood cell` on 5 of 30 colonoscopy images. Plausible-sounding medical concepts are more likely to be hallucinated than clearly absurd ones.
 
@@ -69,7 +69,7 @@ model is boxing red blood cells when asked for white ones. That is a *hypothesis
 2. Strict IoU metrics under-state "roughly right" behaviour, so I read the overlays next to the numbers. The numbers alone would have hidden the polyp successes, and the overlays alone would have hidden the blood-cell failures.
 3. Rejection testing is worth doing: a model that never says "None" is dangerous for medical use, and one that only rejects absurd prompts is not much better.
 4. Evaluation code has to **fail loudly**. My first Colab run silently processed 0 images because a dataset download failed.
-5. Running a 2B VLM on a free T4 is mostly memory engineering (next section).
+5. Running a 2B VLM on a free T4 is mostly memory engineering.
 
 ## Engineering notes: problems I hit and how I fixed them
 
@@ -80,16 +80,6 @@ model is boxing red blood cells when asked for white ones. That is a *hypothesis
 | One bad image killed the whole run | GPU OOM is logged as `error="oom"`, skipped in the metrics and retried on the next run. |
 | Lost progress after a crash | Every image is saved as it finishes; re-running **resumes**. |
 | Dataset download SSL error | `download_data.sh` retries with `--insecure` and `wget`, and aborts if a dataset is empty. |
-
-## Reproduce it (free Colab T4)
-
-1. Put this folder in Google Drive at `MyDrive/MedPercept-Bench`.
-2. Open `notebooks/MedPercept_Bench_Colab.ipynb` and select a **T4 GPU** runtime.
-3. Run the cells in order. Start with `PRESET = 'smoke'` (5 images), then `'quick'` (30, what I report here), then `'standard'` (100).
-4. Rebuild the README figures with `python scripts/make_readme_figures.py`.
-
-No GPU? `python scripts/run_inference.py --mock && python scripts/evaluate.py --mock` runs the whole pipeline with a mock predictor on synthetic data.
-Those numbers only prove the code runs; they say nothing about the model.
 
 ## Repository layout
 
@@ -118,7 +108,7 @@ MedPercept-Bench/
 - Kvasir boxes are derived from the masks, so box metrics partly depend on that conversion.
 - Prompts were not tuned. A prompt like "red blood cell vs white blood cell" might change the BCCD picture.
 - BCCD overlays are still to do, to confirm the red-vs-white blood cell hypothesis.
-- Not a clinical evaluation. Research and learning only.
+- Not a clinical evaluation. This is for Research and learning only.
 
 ## Credits
 
